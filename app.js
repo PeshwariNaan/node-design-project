@@ -10,6 +10,7 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(express.json()); //This is middleware that enables us to see the body of the request. we need app.use for middleware
+app.use(express.static(`${__dirname}/public`))
 
 app.use((req, res, next) => {
   //We have next as the 3rd argument for middleware
