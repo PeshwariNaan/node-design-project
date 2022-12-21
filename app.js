@@ -5,20 +5,11 @@ const app = express();
 
 app.use(express.json()); //This is middleware that enables us to see the body of the request
 
-// app.get('/', (req, res) => {
-//   res.status(200).json({ message: 'Hello form the server side', app: 'natours' });
-// });
-
-// app.post('/', (req,res) => {
-//     res.send("You can post to this endpoint...")
-// })
-
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-//GET request for all tours
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -26,12 +17,30 @@ app.get('/api/v1/tours', (req, res) => {
       tours, // IN es6 we actually don't have to write twice (KEY: VALUE) if the same name - only need tours in this case
     },
   });
-});
+};
 
-//POST request to add tour
-app.post('/api/v1/tours', (req, res) => {
-  // console.log(req.body)
+const getTour = (req, res) => {
+  //The colon: lets us add avariable to the request - A ? makes the parameter optional (/:yes?)
+  // req.params gives us access to the variables in the url
+  const id = req.params.id * 1; //This converts a string to a number
+  const tour = tours.find((el) => el.id === id);
 
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid ID',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour,
+    },
+  });
+};
+
+const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
 
@@ -49,7 +58,58 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
+
+const updateTour = (req, res) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid ID',
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Updated tour here>',
+    },
+  });
+};
+
+const deleteTour = (req, res) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid ID',
+    });
+  }
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+};
+
+// //GET request for all tours
+// app.get('/api/v1/tours', getAllTours)
+
+// //GET request for individual tour
+// app.get('/api/v1/tours/:id', getTour)
+// //POST request to add tour
+
+// app.post('/api/v1/tours', createTour)
+
+// //PATCH request to change tour
+// app.patch('/api/v1/tours/:id', updateTour)
+
+// //Delete request to delete tour
+// app.delete('/api/v1/tours/:id', deleteTour)
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 const port = 3000;
 
