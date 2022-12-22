@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "full node project",
   "main": "app.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production&&nodemon server.js"

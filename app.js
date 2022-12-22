@@ -14,11 +14,12 @@ if (process.env.NODE_ENV === 'developement') {
 app.use(express.json()); //This is middleware that enables us to see the body of the request. we need app.use for middleware
 app.use(express.static(`${__dirname}/public`));
 
-app.use((req, res, next) => {
-  //We have next as the 3rd argument for middleware
-  console.log('Hello from the middleware 🙌');
-  next(); //Always call next()
-});
+//**Simple example of middleware structure */
+// app.use((req, res, next) => {
+//   //We have next as the 3rd argument for middleware
+//   console.log('Hello from the middleware 🙌');
+//   next(); //Always call next()
+// });
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
