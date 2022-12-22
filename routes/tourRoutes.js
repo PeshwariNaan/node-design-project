@@ -1,9 +1,10 @@
 const express = require('express');
-const tourController = require('./../controllers/tourController');
+const tourController = require('../controllers/tourController');
 
 const router = express.Router();
 
-router.param('id', tourController.checkID);
+//How we called the checkId middlewar with sample data
+//router.param('id', tourController.checkID);
 
 router
   .route('/')
