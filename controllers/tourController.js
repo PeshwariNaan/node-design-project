@@ -1,5 +1,3 @@
-//const fs = require('fs');
-
 const Tour = require('../models/tourModel');
 
 //**This code was used for testiing routes with sample data */
@@ -34,7 +32,23 @@ const Tour = require('../models/tourModel');
 //**ROUTE HANDLERS */
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find(); //If there is no argument all items in collection will be returned
+    //BUILD QUERY
+    //1) FILTERING
+    const queryObj = { ...req.query }; //This will create a new object that contains all the key value pairs of the original object
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
+
+    //2)ADVANCED FILTERING
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    console.log(JSON.parse(queryStr));
+    const query = Tour.find(JSON.parse(queryStr));
+    //Above we are replacing some operators to have the $ before them
+    //These operators are: gte, gt, lte, lt => $gte...
+    //EXECUTE QUERY
+    const tours = await query;
+
+    //SEND RESPONSE
     res.status(200).json({
       status: 'success',
       results: tours.length,
