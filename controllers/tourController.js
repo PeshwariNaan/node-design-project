@@ -30,6 +30,13 @@ const Tour = require('../models/tourModel');
 // };
 
 //**ROUTE HANDLERS */
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+  next();
+};
+
 exports.getAllTours = async (req, res) => {
   try {
     //BUILD QUERY
@@ -43,7 +50,7 @@ exports.getAllTours = async (req, res) => {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
     console.log(JSON.parse(queryStr));
     let query = Tour.find(JSON.parse(queryStr));
-    //Above we are replacing some operators to have the $ before them
+    //Above we are replacing some operators to have the $ before them so they work in the url query
     //These operators are: gte, gt, lte, lt => $gte...
 
     //SORTING
