@@ -154,7 +154,7 @@ exports.getTourStats = async (req, res) => {
       {
         $sort: { avgPrice: 1 },
       },
-      // { //We can use multiple matches in the aggregate pipeline
+      // { //We can use multiple matches in the aggregate pipeline -**EXAMPLE
       //   $match: { _id: { $ne: 'EASY' } },
       // },
     ]);
