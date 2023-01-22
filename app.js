@@ -35,7 +35,8 @@ app.use('/api/v1/users', userRouter);
 
 //Middleware for error handling all routes that don't match the two above
 app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404)); //any time next receives and argumnet no matter what it is, express will automatically assume its an error.
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404)); //any time next receives an argument no matter what it is,
+  //express will automatically assume its an error.
   // Skips all other middlewares in the middleware stack and send the error to the global middleware handler
 });
 
