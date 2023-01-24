@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -25,12 +26,42 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a password'],
     minlength: 8,
+    select: false, //This data will not be sent to the client
   },
   passwordConfirm: {
     type: String,
     required: [true, 'Please confirm your password'],
+    validate: {
+      //This only works on CREATE and SAVE(when updating user)!!!
+      validator: function (el) {
+        return el === this.password; //password === passwordConfirm
+      },
+      message: 'Passwords do not match!',
+    },
   },
 });
+
+//Middleware
+
+//Encrypt passwords between getting the data and saving it.
+//The bcryp hash method is async
+userSchema.pre('save', async function (next) {
+  //only run if password was modified
+  if (!this.isModified('password')) return next();
+  //Hash the password with cost of 12 (number of times this is salted )
+  this.password = await bcrypt.hash(this.password, 12);
+
+  this.passwordConfirm = undefined;
+  next();
+});
+
+userSchema.methods.verifyPassword = async function (
+  //CHecking if the value of the hashed pw's match to verify
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 

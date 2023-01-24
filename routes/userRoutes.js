@@ -4,7 +4,8 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-router.post('/signup', authController.signup); //We only need to post for this route to signup a new user
+router.post('/signup', authController.signup); //We only need post for this route to signup a new user
+router.post('/login', authController.login);
 
 router
   .route('/')
