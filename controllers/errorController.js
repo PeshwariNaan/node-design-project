@@ -12,6 +12,12 @@ const handleDuplicateFieldsDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleValidationErrorDB = (err) => {
+  const errors = Object.values(err.errors).map((el) => el.message);
+  const message = `Invalid input data. ${errors.join('. ')}`;
+  return new AppError(message, 400);
+};
+
 const sendErrorForDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -34,7 +40,7 @@ const sendErrorForProduction = (err, res) => {
     // 1) Log error
     console.error('ERROR  🔥', err);
 
-    // 2) Send generic message
+    // 2) Send generic message - This is a non operational error (we didn't create it ourselves)
     res.status(500).json({
       status: 'error',
       message: 'Something went very wrong',
@@ -48,12 +54,17 @@ module.exports = (err, req, res, next) => {
 
   if (process.env.NODE_ENV === 'developement') {
     sendErrorForDev(err, res);
+
+    //Here we are handling errors that are operational. This is what the user will see
+    //for the following types of errors.
   } else if (process.env.NODE_ENV === 'production') {
-    //let error = Object.assign(err);
+    //let error = Object.assign(err); //This did not work - below is the fix
     let error = { ...err };
     error.name = err.name;
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
+    if (error.name === 'ValidationError')
+      error = handleValidationErrorDB(error);
     sendErrorForProduction(error, res);
   }
 };
