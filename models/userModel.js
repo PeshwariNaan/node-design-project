@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a password'],
     minlength: 8,
-    select: false, //This data will not be sent to the client
+    select: false, //This data will not be sent to the client, it is hidden
   },
   passwordConfirm: {
     type: String,
@@ -48,6 +48,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false, //This data will not be sent to the client, it is hidden
+  },
 });
 
 //Middleware
@@ -71,6 +76,13 @@ userSchema.pre('save', function (next) {
   next();
 });
 
+userSchema.pre(/^find/, function (next) {
+  //This regular expression '/^find/' will look for the 'find' keyword in the queries.
+  // so getAllUsers has find so this middleware will run before that query is executed
+  // this points to the current query
+  this.find({ active: { $ne: false } });
+  next();
+});
 //User Methods
 userSchema.methods.verifyPassword = async function (
   //Checking if the value of the hashed pw's match to verify
