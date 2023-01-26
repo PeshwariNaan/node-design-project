@@ -64,6 +64,14 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000; //Adding the second ensures that the token is always created after the password has been changed
+  next();
+});
+
+//User Methods
 userSchema.methods.verifyPassword = async function (
   //Checking if the value of the hashed pw's match to verify
   candidatePassword,
