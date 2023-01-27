@@ -13,7 +13,18 @@ const signToken = (id) =>
 
 const createAndSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+  const expiryDate =
+    Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000;
+  console.log('Expiry Date :', expiryDate);
+  const cookieOptions = {
+    expires: new Date(expiryDate),
+    httpOnly: true, //This makes it so the token cannot be manipulated by the browser (XSS attacks)
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //Only activate in production
+  res.cookie('jwt', token, cookieOptions);
 
+  //Remove pw from output
+  user.password = undefined;
   res.status(statusCode).json({
     status: 'success',
     token,
