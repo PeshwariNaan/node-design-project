@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
@@ -9,13 +10,20 @@ const userRouter = require('./routes/userRoutes');
 const app = express();
 
 // **GLOBAL MIDDLEWARE
+
+// Set security HTTP Headers
+app.use(helmet()); //Best to use helmet early in the middleware stack so the http headers are surely set
+
 console.log(`App is running in ${process.env.NODE_ENV} mode`);
+
+//Developement Logging
 if (process.env.NODE_ENV === 'developement') {
   app.use(morgan('dev'));
 }
 
-// Creating a litmiter to prevent DDoS attacks and brute force pw attacks
+// Limit requests from same IP
 const limiter = rateLimit({
+  //Creating a limiter to prevent DDoS attacks and brute force pw attacks
   max: 100, //This needs to be adapted to the webApps
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
@@ -23,7 +31,10 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
-app.use(express.json()); //This is middleware that enables us to see the body of the request. we need app.use for middleware
+//Body parser - reading data from body into req.body
+app.use(express.json({ limit: '10kb' })); //This is middleware that enables us to see the body of the request. we need app.use for middleware
+
+//Serving static files
 app.use(express.static(`${__dirname}/public`));
 
 //**Simple example of middleware structure */
@@ -33,6 +44,7 @@ app.use(express.static(`${__dirname}/public`));
 //   next(); //Always call next()
 // });
 
+//Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   console.log(req.headers);
