@@ -21,9 +21,7 @@ mongoose
   });
 
 //Read JSON FILE
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8')
-);
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 
 //IMPORT DATA INTO DATABASE
 const importData = async () => {
@@ -31,7 +29,7 @@ const importData = async () => {
     await Tour.create(tours);
     console.log('Data successfully loaded');
   } catch (err) {
-    console.log(err.messageS);
+    console.log(err.message);
   }
   process.exit();
 };

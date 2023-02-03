@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+//const User = require('./userModel');
 //const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
@@ -88,6 +89,33 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      //Mongoose supports geospacial data right out of the box
+      //GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'], // This makes it so this cannot be anythng else but 'Point' - no other value is accepted
+      },
+      coordinates: [Number], // Long, Lat (backwords from what it usually is)
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }], //This is how we create a reference to another document in a completely different collection
+    //'User' obviously is the other model that we are referencing - This is child referencing***
   },
   {
     toJSON: { virtuals: true },
@@ -106,6 +134,13 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
+// Example code of how to embed a user doc into the tour document when it is created
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map((id) => User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
+
 //We can have middleware running before and after a certain event - simple examples
 // tourSchema.pre('save', function (next) {
 //   console.log('WIll save document');
@@ -123,6 +158,18 @@ tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
 
   this.start = Date.now();
+  next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    //Note: populate can affect performance - it has to create a new query which is why
+    path: 'guides',
+    select: '-__v -passwordChangedAt', // put the - before the fields you don't want to see
+  }); //Adding .populate will fill in the data from the reference
+  //I created in the tours model.
+  // This only happens with the query - not in the DB
+
   next();
 });
 
