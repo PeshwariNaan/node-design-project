@@ -128,6 +128,14 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+// This is making use of virtual populate - This solves the issue of having to many items referenced in an array.
+// A tour can have many reviews so we do it this way. Now the data can be displayed but it doesn't persist in the DB
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour', //This is the field in the review model for the reference - this connects the models
+  localField: '_id',
+});
+
 //DOCUMENT MIDDLEWARE: runs before .save() and .create() (pre-document middleware)
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
