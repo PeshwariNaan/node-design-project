@@ -37,6 +37,20 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+// Middleware
+
+reviewSchema.pre(/^find/, function (next) {
+  //Remeber that this will add two additional quesries by using populate twice
+  this.populate({
+    path: 'tour', //This is the ref
+    select: 'name',
+  }).populate({
+    path: 'user',
+    select: 'name photo', //These are the only fields that we want to populate - make sure not to send personal info (i.e. email addresses)
+  });
+  next();
+});
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
