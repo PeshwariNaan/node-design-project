@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -11,18 +12,24 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+exports.getAllUsers = factory.getAll(User);
+// catchAsync(async (req, res, next) => {
+//   const users = await User.find();
 
-  //SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users, // IN es6 we actually don't have to write twice (KEY: VALUE) if they are the same name - only need tours in this case
-    },
-  });
-});
+//   //SEND RESPONSE
+//   res.status(200).json({
+//     status: 'success',
+//     results: users.length,
+//     data: {
+//       users, // IN es6 we actually don't have to write twice (KEY: VALUE) if they are the same name - only need tours in this case
+//     },
+//   });
+// });
+
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if userPOSTs password data
@@ -59,30 +66,16 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-};
+exports.getUser = factory.getOne(User);
 
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'This route is not yet defined',
+    message: 'This route is not defined, please use sign-up instead.',
   });
 };
 
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-};
+// Do NOT update passwords with this function
+exports.updateUser = factory.updateOne(User);
 
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-};
+exports.deleteUser = factory.deleteOne(User);
