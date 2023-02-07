@@ -71,17 +71,46 @@ reviewSchema.statics.calcAverageRating = async function (tourId) {
     },
   ]);
   console.log('Stats: ', stats);
-  await Tour.findByIdAndUpdate(tourId, {
-    ratingsQuantity: stats[0].numOfRatings,
-    ratingsAverage: stats[0].avgRating,
-  });
+
+  if (stats.length > 0) {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].numOfRatings,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
 };
 reviewSchema.post('save', function () {
+  // We want post because we want to see the rating after the new review has been added
   //Post middleware does have access to next but we don't need it here because this is the only post middleware that we have. If we needed to do something
   //with the output of this middleware then we would have to adjust/wait for this to finish
   //We want to run the calcAverageRating function each time a new review is created
   // this points to current review
-  this.constructor.calcAverageRating(this.tour); //Using this.constructor gives us access to Review
+  this.constructor.calcAverageRating(this.tour); //Using this.constructor gives us access to tour
+});
+
+//findByIdAndUpdate
+//findByIdAndDelete
+//** Before we did a two step process to get access to the document - we can skip this with the code below */
+// reviewSchema.pre(/^findOneAnd/, async function (next) {
+//   //we need access to the review document to edit or delete and we need access to the tour to run calcAverageRating. We only have access to the query so we run a query which gives us access to the document
+//   this.r = await this.findOne(); // saving this.r adds a property to the r variable and we can have access to this in the post method middleware below
+//   console.log(('r for review: ', this.r));
+//   next();
+// });
+
+// reviewSchema.post(/^findOneAnd/, async function () {
+//   //await this.findOne() does NOT work here, query has already executed
+//   await this.r.constructor.calcAverageRating(this.r.tour);
+// });
+
+//This middleware gives us access to the review doc we needed and we don't need the two step process we have above
+reviewSchema.post(/^findOneAnd/, async (docs) => {
+  await docs.constructor.calcAverageRating(docs.tour);
 });
 
 const Review = mongoose.model('Review', reviewSchema);
