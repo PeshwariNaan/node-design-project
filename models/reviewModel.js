@@ -1,5 +1,6 @@
 // Review - add / rating / createdAt / ref to tour / ref to user
 const mongoose = require('mongoose');
+const Tour = require('./tourModel');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -54,6 +55,33 @@ reviewSchema.pre(/^find/, function (next) {
     select: 'name photo', //These are the only fields that we want to populate - make sure not to send personal info (i.e. email addresses)
   });
   next();
+});
+
+reviewSchema.statics.calcAverageRating = async function (tourId) {
+  const stats = await this.aggregate([
+    {
+      $match: { tour: tourId },
+    },
+    {
+      $group: {
+        _id: '$tour',
+        numOfRatings: { $sum: 1 }, //Number of ratings
+        avgRating: { $avg: '$rating' }, //Calculate the average from the rating field
+      },
+    },
+  ]);
+  console.log('Stats: ', stats);
+  await Tour.findByIdAndUpdate(tourId, {
+    ratingsQuantity: stats[0].numOfRatings,
+    ratingsAverage: stats[0].avgRating,
+  });
+};
+reviewSchema.post('save', function () {
+  //Post middleware does have access to next but we don't need it here because this is the only post middleware that we have. If we needed to do something
+  //with the output of this middleware then we would have to adjust/wait for this to finish
+  //We want to run the calcAverageRating function each time a new review is created
+  // this points to current review
+  this.constructor.calcAverageRating(this.tour); //Using this.constructor gives us access to Review
 });
 
 const Review = mongoose.model('Review', reviewSchema);
