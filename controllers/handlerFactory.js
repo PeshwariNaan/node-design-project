@@ -55,8 +55,8 @@ exports.getAll = (Model) =>
       .sort()
       .limitFields()
       .paginate();
+    // const docs = await features.query.explain(); // Adding .explain() lets us know how many indexes mongoDB is having to look at for a query
     const docs = await features.query;
-
     //SEND RESPONSE
     res.status(200).json({
       status: 'success',

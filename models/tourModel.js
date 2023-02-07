@@ -123,6 +123,13 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+//tourSchema.index({ price: 1 }); // This is how we set the index and make the query much more efficient
+//Setting the value here to '1' means we are sorting in ascending order
+tourSchema.index({ price: 1, ratingsAverage: -1 }); // ** NOTE: If you create an index and then move to a compound index with one of the same values
+// then be sure to manualy remove the first index in compass to get it to work properly. ALso don't set indexes on collections that are written to a lot because
+//the cost of updating the index is not good.
+tourSchema.index({ slug: 1 });
+
 tourSchema.virtual('durationWeeks').get(function () {
   //Need to use a regular function here and not an arrow so we have access to 'this' (will point to the current document)
   return this.duration / 7;

@@ -57,8 +57,8 @@ const userSchema = new mongoose.Schema({
 
 //Middleware
 
-//Encrypt passwords between getting the data and saving it.
-//The bcryp hash method is async
+// Encrypt passwords between getting the data and saving it.
+// The bcryp hash method is async
 userSchema.pre('save', async function (next) {
   //only run if password was modified
   if (!this.isModified('password')) return next();
