@@ -35,6 +35,10 @@ router
   );
 
 router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourController.getToursWithin); //This could be done with query strings but this is a different way to do it
+
+router
   .route('/')
   .get(tourController.getAllTours)
   .post(
