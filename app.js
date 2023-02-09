@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -10,9 +11,17 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
+app.set('view engine', 'pug'); //We can define our view engine but we do not need to add any packages - this already happens with express
+
+app.set('views', path.join(__dirname, 'views'));
+
+//Serving static files
+//app.use(express.static(`${__dirname}/public`)); //Usiing the path.join method below reduces errors with the paths having a '/' or not
+app.use(express.static(path.join(__dirname, 'public'))); //This means that all static assets will be served from the public folder
 // **GLOBAL MIDDLEWARE
 
 // Set security HTTP Headers
@@ -58,9 +67,6 @@ app.use(
   })
 );
 
-//Serving static files
-app.use(express.static(`${__dirname}/public`));
-
 //**Simple example of middleware structure */
 // app.use((req, res, next) => {
 //   //We have next as the 3rd argument for middleware
@@ -76,7 +82,7 @@ app.use((req, res, next) => {
 });
 
 //**ROUTES */
-
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
