@@ -194,8 +194,12 @@ tourSchema.pre(/^find/, function (next) {
 
 //AGGREGATION MIDDLEWARE
 tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  //console.log('THIS IS TEH PIPELINE: ', this.pipeline());
+  const things = this.pipeline()[0];
+  if (Object.keys(things)[0] !== '$geoNear') {
+    this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  }
+
+  console.log('THIS IS THE PIPELINE: ', this.pipeline());
   next();
 });
 
