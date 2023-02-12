@@ -6,12 +6,14 @@ const mongoSanitze = require('express-mongo-sanitize');
 const hpp = require('hpp');
 const xss = require('xss-clean');
 const helmet = require('helmet');
-const AppError = require('./utils/appError');
+const cookieParser = require('cookie-parser');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
+
+const AppError = require('./utils/appError');
 
 const app = express();
 
@@ -25,8 +27,42 @@ app.use(express.static(path.join(__dirname, 'public'))); //This means that all s
 // **GLOBAL MIDDLEWARE
 
 // Set security HTTP Headers
-app.use(helmet()); //Best to use helmet early in the middleware stack so the http headers are surely set
-
+//app.use(helmet()); //Best to use helmet early in the middleware stack so the http headers are surely set
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: false,
+    'block-all-mixed-content': true,
+    'upgrade-insecure-requests': true,
+    directives: {
+      'default-src': ["'self'"],
+      'base-uri': "'self'",
+      'font-src': ["'self'", 'https:', 'data:'],
+      'frame-ancestors': ["'self'"],
+      'img-src': ["'self'", 'data:'],
+      'object-src': ["'none'"],
+      'script-src': ["'self'", 'https://cdnjs.cloudflare.com'],
+      'script-src-attr': "'none'",
+      'style-src': ["'self'", 'https://cdnjs.cloudflare.com'],
+    },
+  }),
+  helmet.dnsPrefetchControl({
+    allow: true,
+  }),
+  helmet.frameguard({
+    action: 'deny',
+  }),
+  helmet.hidePoweredBy(),
+  helmet.hsts({
+    maxAge: 123456,
+    includeSubDomains: false,
+  }),
+  helmet.ieNoOpen(),
+  helmet.noSniff(),
+  helmet.referrerPolicy({
+    policy: ['origin', 'unsafe-url'],
+  }),
+  helmet.xssFilter()
+);
 console.log(`App is running in ${process.env.NODE_ENV} mode`);
 
 //Developement Logging
@@ -46,6 +82,7 @@ app.use('/api', limiter);
 
 //Body parser - reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); //This is middleware that enables us to see the body of the request. we need app.use for middleware
+app.use(cookieParser()); // This is middleware that parses data from cookies like our jwt's
 
 // Data Sanitization against NoSQL query injection
 app.use(mongoSanitze()); //This takes out the query operators needed for the injection
@@ -77,7 +114,7 @@ app.use(
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.headers);
+  console.log(req.cookies);
   next();
 });
 
