@@ -18,7 +18,7 @@ const createAndSendToken = (user, statusCode, res) => {
   console.log('Expiry Date :', expiryDate);
   const cookieOptions = {
     expires: new Date(expiryDate),
-    httpOnly: true, //This makes it so the token cannot be manipulated by the browser (XSS attacks)
+    httpOnly: true, //This makes it so the token cannot be manipulated by the browser (XSS attacks) //Cannot be deleted either
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //Only activate in production
   res.cookie('jwt', token, cookieOptions);
@@ -65,6 +65,16 @@ exports.login = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res);
 });
 
+// Logout
+exports.logout = (req, res) => {
+  // res.cookie('jwt', 'loggedout', {
+  //   expires: new Date(Date.now() + 10 * 1000),
+  //   httpOnly: true,
+  // });
+  res.clearCookie('jwt');
+  res.status(200).json({ status: 'success' });
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check it exists
   let token;
@@ -78,13 +88,14 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // console.log(token);
   if (!token) {
-    next(
-      new AppError('You are not logged in! Please login to get access', 401)
-    );
+    return res.redirect('/'); //This is from Q&A solution - not sure if it works yet
+    // next(
+    //   new AppError('You are not logged in! Please login to get access', 401)
+    // );
   }
   // 2) Verification of token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); // This is a way of chaining the promisify util
-  console.log(decoded);
+  //console.log(decoded);
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
@@ -103,6 +114,37 @@ exports.protect = catchAsync(async (req, res, next) => {
   // Grant access to protected route
   req.user = currentUser; // The request object is what is passed from middleware to middlewhere and this is how we get access to it and add things as well
   next();
+});
+
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  // 1) Getting token and check it exists
+  if (req.cookies.jwt) {
+    try {
+      // Verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 4) Check if user changed passwords after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // There is a logged in user
+      res.locals.user = currentUser; //Never seen this before - Each pug template will have access to currentUser using '.locals'
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next(); // If there is no cookie then we go to next immediately with no errors.
 });
 
 exports.restrictTo =

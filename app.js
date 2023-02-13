@@ -28,40 +28,59 @@ app.use(express.static(path.join(__dirname, 'public'))); //This means that all s
 
 // Set security HTTP Headers
 //app.use(helmet()); //Best to use helmet early in the middleware stack so the http headers are surely set
+// Further HELMET configuration for Security Policy (CSP)
+const scriptSrcUrls = [
+  'https://unpkg.com/',
+  'https://tile.openstreetmap.org',
+  'https://*.tiles.mapbox.com',
+  'https://events.mapbox.com',
+  'https://js.stripe.com',
+  'https://m.stripe.network',
+  'https://*.cloudflare.com',
+  'https://api.mapbox.com',
+];
+const styleSrcUrls = [
+  'https://unpkg.com/',
+  'https://*.tiles.mapbox.com',
+  'https://tile.openstreetmap.org',
+  'https://fonts.googleapis.com/',
+];
+const connectSrcUrls = [
+  'https://unpkg.com',
+  'https://*.tiles.mapbox.com',
+  'https://events.mapbox.com',
+  'https://api.mapbox.com',
+  'https://tile.openstreetmap.org',
+  'https://*.stripe.com',
+  'https://bundle.js:*',
+  'ws://127.0.0.1:*/',
+];
+const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+
 app.use(
   helmet.contentSecurityPolicy({
-    useDefaults: false,
-    'block-all-mixed-content': true,
-    'upgrade-insecure-requests': true,
     directives: {
-      'default-src': ["'self'"],
-      'base-uri': "'self'",
-      'font-src': ["'self'", 'https:', 'data:'],
-      'frame-ancestors': ["'self'"],
-      'img-src': ["'self'", 'data:'],
-      'object-src': ["'none'"],
-      'script-src': ["'self'", 'https://cdnjs.cloudflare.com'],
-      'script-src-attr': "'none'",
-      'style-src': ["'self'", 'https://cdnjs.cloudflare.com'],
+      defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
+      baseUri: ["'self'"],
+      fontSrc: ["'self'", ...fontSrcUrls],
+      scriptSrc: ["'self'", 'https:', 'http:', 'blob:', ...scriptSrcUrls],
+      frameSrc: ["'self'", 'https://js.stripe.com'],
+      objectSrc: ["'none'"],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", 'blob:', 'https://m.stripe.network'],
+      childSrc: ["'self'", 'blob:'],
+      imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+      formAction: ["'self'"],
+      connectSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'data:',
+        'blob:',
+        ...connectSrcUrls,
+      ],
+      upgradeInsecureRequests: [],
     },
-  }),
-  helmet.dnsPrefetchControl({
-    allow: true,
-  }),
-  helmet.frameguard({
-    action: 'deny',
-  }),
-  helmet.hidePoweredBy(),
-  helmet.hsts({
-    maxAge: 123456,
-    includeSubDomains: false,
-  }),
-  helmet.ieNoOpen(),
-  helmet.noSniff(),
-  helmet.referrerPolicy({
-    policy: ['origin', 'unsafe-url'],
-  }),
-  helmet.xssFilter()
+  })
 );
 console.log(`App is running in ${process.env.NODE_ENV} mode`);
 
