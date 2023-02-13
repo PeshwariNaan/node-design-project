@@ -15,7 +15,7 @@ const createAndSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
   const expiryDate =
     Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000;
-  console.log('Expiry Date :', expiryDate);
+  //console.log('Expiry Date :', expiryDate);
   const cookieOptions = {
     expires: new Date(expiryDate),
     httpOnly: true, //This makes it so the token cannot be manipulated by the browser (XSS attacks) //Cannot be deleted either
@@ -113,6 +113,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // Grant access to protected route
   req.user = currentUser; // The request object is what is passed from middleware to middlewhere and this is how we get access to it and add things as well
+  res.locals.user = currentUser; //We add this to gain access to user in the pug templates
   next();
 });
 
