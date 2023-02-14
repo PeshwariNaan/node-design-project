@@ -1320,10 +1320,12 @@ exports.default = _typeof;
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}],"fEorH":[function(require,module,exports) {
 /* eslint-disable */ var _login = require("./login");
 var _mapbox = require("./mapbox");
+var _updateSettings = require("./updateSettings");
 // DOM ELEMENTS
 var mapBox = document.getElementById("map");
 var loginForm = document.querySelector(".form--login");
 var logOutBtn = document.querySelector(".nav__el--logout");
+var userDataForm = document.querySelector(".form-user-data");
 // DELEGATION
 if (mapBox) {
     var locations = JSON.parse(mapBox.dataset.locations);
@@ -1338,8 +1340,14 @@ if (loginForm) loginForm.addEventListener("submit", function(e) {
     (0, _login.login)(email, password);
 });
 if (logOutBtn) logOutBtn.addEventListener("click", (0, _login.logout));
+if (userDataForm) userDataForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    var name = document.getElementById("name").value;
+    var email = document.getElementById("email").value;
+    (0, _updateSettings.updateData)(name, email);
+});
 
-},{"./login":"8Xqdn","./mapbox":"fCYdf"}],"8Xqdn":[function(require,module,exports) {
+},{"./login":"8Xqdn","./mapbox":"fCYdf","./updateSettings":"hXE8O"}],"8Xqdn":[function(require,module,exports) {
 /* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", function() {
@@ -1516,6 +1524,66 @@ var displayMap = function(locations) {
     });
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}]},["8iGoc","fEorH"], "fEorH", "parcelRequiree8fd")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}],"hXE8O":[function(require,module,exports) {
+/* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateData", function() {
+    return updateData;
+});
+var _asyncToGeneratorMjs = require("@swc/helpers/src/_async_to_generator.mjs");
+var _asyncToGeneratorMjsDefault = parcelHelpers.interopDefault(_asyncToGeneratorMjs);
+var _tsGeneratorMjs = require("@swc/helpers/src/_ts_generator.mjs");
+var _tsGeneratorMjsDefault = parcelHelpers.interopDefault(_tsGeneratorMjs);
+var _alerts = require("./alerts");
+var updateData = function() {
+    var _ref = (0, _asyncToGeneratorMjsDefault.default)(function(name, email) {
+        var res, err;
+        return (0, _tsGeneratorMjsDefault.default)(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    _state.trys.push([
+                        0,
+                        2,
+                        ,
+                        3
+                    ]);
+                    return [
+                        4,
+                        axios({
+                            method: "PATCH",
+                            url: "http://127.0.0.1:3000/api/v1/users/updateMe",
+                            data: {
+                                name: name,
+                                email: email
+                            }
+                        })
+                    ];
+                case 1:
+                    res = _state.sent();
+                    if (res.data.status === "success") (0, _alerts.showAlert)("success", "Data updated successfully!");
+                    return [
+                        3,
+                        3
+                    ];
+                case 2:
+                    err = _state.sent();
+                    (0, _alerts.showAlert)("error", err.response.data.message);
+                    return [
+                        3,
+                        3
+                    ];
+                case 3:
+                    return [
+                        2
+                    ];
+            }
+        });
+    });
+    return function updateData(name, email) {
+        return _ref.apply(this, arguments);
+    };
+}();
+
+},{"@swc/helpers/src/_async_to_generator.mjs":"7gp7U","@swc/helpers/src/_ts_generator.mjs":"gzbmD","./alerts":"kDxn9","@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}]},["8iGoc","fEorH"], "fEorH", "parcelRequiree8fd")
 
 //# sourceMappingURL=index.js.map
