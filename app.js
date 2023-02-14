@@ -101,6 +101,7 @@ app.use('/api', limiter);
 
 //Body parser - reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); //This is middleware that enables us to see the body of the request. we need app.use for middleware
+app.use(express.urlencoded({ extended: true, limit: '10kb' })); //This allows us to parse the data coming from forms. The extended option allows for more complex data
 app.use(cookieParser()); // This is middleware that parses data from cookies like our jwt's
 
 // Data Sanitization against NoSQL query injection
