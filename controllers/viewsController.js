@@ -28,10 +28,10 @@ exports.getTour = catchAsync(async (req, res, next) => {
   // 3) Render the template using data from step 1
   res
     .status(200)
-    .set(
-      'Content-Security-Policy',
-      'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com'
-    )
+    // .set(
+    //   'Content-Security-Policy',
+    //   'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com'
+    // )
     .render('tour', {
       title: `${tour.name} Tour`,
       tour,

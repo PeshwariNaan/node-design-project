@@ -1326,12 +1326,14 @@ var _tsGeneratorMjsDefault = parcelHelpers.interopDefault(_tsGeneratorMjs);
 var _login = require("./login");
 var _mapbox = require("./mapbox");
 var _updateSettings = require("./updateSettings");
+var _stripe = require("./stripe");
 // DOM ELEMENTS
 var mapBox = document.getElementById("map");
 var loginForm = document.querySelector(".form--login");
 var logOutBtn = document.querySelector(".nav__el--logout");
 var userDataForm = document.querySelector(".form-user-data");
 var userPasswordForm = document.querySelector(".form-user-password");
+var bookBtn = document.getElementById("book-tour");
 // DELEGATION
 if (mapBox) {
     var locations = JSON.parse(mapBox.dataset.locations);
@@ -1390,8 +1392,13 @@ if (userPasswordForm) userPasswordForm.addEventListener("submit", function() {
         return _ref.apply(this, arguments);
     };
 }());
+if (bookBtn) bookBtn.addEventListener("click", function(e) {
+    e.target.textContent = "Processing...";
+    var tourId = e.target.dataset.tourId;
+    (0, _stripe.bookTour)(tourId);
+});
 
-},{"./login":"8Xqdn","./mapbox":"fCYdf","./updateSettings":"hXE8O","@swc/helpers/src/_async_to_generator.mjs":"7gp7U","@swc/helpers/src/_ts_generator.mjs":"gzbmD","@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}],"8Xqdn":[function(require,module,exports) {
+},{"./login":"8Xqdn","./mapbox":"fCYdf","./updateSettings":"hXE8O","@swc/helpers/src/_async_to_generator.mjs":"7gp7U","@swc/helpers/src/_ts_generator.mjs":"gzbmD","@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP","./stripe":"20VmI"}],"8Xqdn":[function(require,module,exports) {
 /* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", function() {
@@ -1626,6 +1633,141 @@ var updateSettings = function() {
     };
 }();
 
-},{"@swc/helpers/src/_async_to_generator.mjs":"7gp7U","@swc/helpers/src/_ts_generator.mjs":"gzbmD","./alerts":"kDxn9","@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}]},["8iGoc","fEorH"], "fEorH", "parcelRequiree8fd")
+},{"@swc/helpers/src/_async_to_generator.mjs":"7gp7U","@swc/helpers/src/_ts_generator.mjs":"gzbmD","./alerts":"kDxn9","@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}],"20VmI":[function(require,module,exports) {
+/* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "bookTour", function() {
+    return bookTour;
+});
+var _asyncToGeneratorMjs = require("@swc/helpers/src/_async_to_generator.mjs");
+var _asyncToGeneratorMjsDefault = parcelHelpers.interopDefault(_asyncToGeneratorMjs);
+var _tsGeneratorMjs = require("@swc/helpers/src/_ts_generator.mjs");
+var _tsGeneratorMjsDefault = parcelHelpers.interopDefault(_tsGeneratorMjs);
+var _alerts = require("./alerts");
+var _stripeJs = require("@stripe/stripe-js");
+var bookTour = function() {
+    var _ref = (0, _asyncToGeneratorMjsDefault.default)(function(tourId) {
+        var stripe, session;
+        return (0, _tsGeneratorMjsDefault.default)(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        (0, _stripeJs.loadStripe)("pk_test_51L5OEPK5Vz0ZWlMoOsjCUEFVKVxX1q2GLsKPpe0otCAl7AwZiJh6AS1JQoFMRsU0v1DY5tSDNl0Gh9pmVeoRwL5Z00F1nqDUbq")
+                    ];
+                case 1:
+                    stripe = _state.sent();
+                    return [
+                        4,
+                        axios("http://127.0.0.1:3000/api/v1/bookings/checkout-session/".concat(tourId))
+                    ];
+                case 2:
+                    session = _state.sent();
+                    console.log(session);
+                    return [
+                        2
+                    ];
+            }
+        });
+    // 2) Create checkout form plus charge credit card
+    });
+    return function bookTour(tourId) {
+        return _ref.apply(this, arguments);
+    };
+}();
+
+},{"@swc/helpers/src/_async_to_generator.mjs":"7gp7U","@swc/helpers/src/_ts_generator.mjs":"gzbmD","@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP","./alerts":"kDxn9","@stripe/stripe-js":"84iag"}],"84iag":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "loadStripe", function() {
+    return loadStripe;
+});
+var V3_URL = "https://js.stripe.com/v3";
+var V3_URL_REGEX = /^https:\/\/js\.stripe\.com\/v3\/?(\?.*)?$/;
+var EXISTING_SCRIPT_MESSAGE = "loadStripe.setLoadParameters was called but an existing Stripe.js script already exists in the document; existing script parameters will be used";
+var findScript = function findScript() {
+    var scripts = document.querySelectorAll('script[src^="'.concat(V3_URL, '"]'));
+    for(var i = 0; i < scripts.length; i++){
+        var script = scripts[i];
+        if (!V3_URL_REGEX.test(script.src)) continue;
+        return script;
+    }
+    return null;
+};
+var injectScript = function injectScript(params) {
+    var queryString = params && !params.advancedFraudSignals ? "?advancedFraudSignals=false" : "";
+    var script = document.createElement("script");
+    script.src = "".concat(V3_URL).concat(queryString);
+    var headOrBody = document.head || document.body;
+    if (!headOrBody) throw new Error("Expected document.body not to be null. Stripe.js requires a <body> element.");
+    headOrBody.appendChild(script);
+    return script;
+};
+var registerWrapper = function registerWrapper(stripe, startTime) {
+    if (!stripe || !stripe._registerWrapper) return;
+    stripe._registerWrapper({
+        name: "stripe-js",
+        version: "1.46.0",
+        startTime: startTime
+    });
+};
+var stripePromise = null;
+var loadScript = function loadScript(params) {
+    // Ensure that we only attempt to load Stripe.js at most once
+    if (stripePromise !== null) return stripePromise;
+    stripePromise = new Promise(function(resolve, reject) {
+        if (typeof window === "undefined") {
+            // Resolve to null when imported server side. This makes the module
+            // safe to import in an isomorphic code base.
+            resolve(null);
+            return;
+        }
+        if (window.Stripe && params) console.warn(EXISTING_SCRIPT_MESSAGE);
+        if (window.Stripe) {
+            resolve(window.Stripe);
+            return;
+        }
+        try {
+            var script = findScript();
+            if (script && params) console.warn(EXISTING_SCRIPT_MESSAGE);
+            else if (!script) script = injectScript(params);
+            script.addEventListener("load", function() {
+                if (window.Stripe) resolve(window.Stripe);
+                else reject(new Error("Stripe.js not available"));
+            });
+            script.addEventListener("error", function() {
+                reject(new Error("Failed to load Stripe.js"));
+            });
+        } catch (error) {
+            reject(error);
+            return;
+        }
+    });
+    return stripePromise;
+};
+var initStripe = function initStripe(maybeStripe, args, startTime) {
+    if (maybeStripe === null) return null;
+    var stripe = maybeStripe.apply(undefined, args);
+    registerWrapper(stripe, startTime);
+    return stripe;
+}; // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+// own script injection.
+var stripePromise$1 = Promise.resolve().then(function() {
+    return loadScript(null);
+});
+var loadCalled = false;
+stripePromise$1["catch"](function(err) {
+    if (!loadCalled) console.warn(err);
+});
+var loadStripe = function loadStripe() {
+    for(var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++)args[_key] = arguments[_key];
+    loadCalled = true;
+    var startTime = Date.now();
+    return stripePromise$1.then(function(maybeStripe) {
+        return initStripe(maybeStripe, args, startTime);
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"9gFdP"}]},["8iGoc","fEorH"], "fEorH", "parcelRequiree8fd")
 
 //# sourceMappingURL=index.js.map

@@ -5,18 +5,20 @@ const rateLimit = require('express-rate-limit');
 const mongoSanitze = require('express-mongo-sanitize');
 const hpp = require('hpp');
 const xss = require('xss-clean');
-const helmet = require('helmet');
+//const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const { helmet, csp } = require('./utils/helmet_csp_config');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
 
 const AppError = require('./utils/appError');
 
-const app = express();
-
+const app = express(helmet);
+csp(app);
 app.set('view engine', 'pug'); //We can define our view engine but we do not need to add any packages - this already happens with express
 
 app.set('views', path.join(__dirname, 'views'));
@@ -29,59 +31,61 @@ app.use(express.static(path.join(__dirname, 'public'))); //This means that all s
 // Set security HTTP Headers
 //app.use(helmet()); //Best to use helmet early in the middleware stack so the http headers are surely set
 // Further HELMET configuration for Security Policy (CSP)
-const scriptSrcUrls = [
-  'https://unpkg.com/',
-  'https://tile.openstreetmap.org',
-  'https://*.tiles.mapbox.com',
-  'https://events.mapbox.com',
-  'https://js.stripe.com',
-  'https://m.stripe.network',
-  'https://*.cloudflare.com',
-  'https://api.mapbox.com',
-];
-const styleSrcUrls = [
-  'https://unpkg.com/',
-  'https://*.tiles.mapbox.com',
-  'https://tile.openstreetmap.org',
-  'https://fonts.googleapis.com/',
-];
-const connectSrcUrls = [
-  'https://unpkg.com',
-  'https://*.tiles.mapbox.com',
-  'https://events.mapbox.com',
-  'https://api.mapbox.com',
-  'https://tile.openstreetmap.org',
-  'https://*.stripe.com',
-  'https://bundle.js:*',
-  'ws://127.0.0.1:*/',
-];
-const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+// const scriptSrcUrls = [
+//   'https://unpkg.com/',
+//   'https://tile.openstreetmap.org',
+//   'https://*.tiles.mapbox.com',
+//   'https://events.mapbox.com',
+//   'https://m.stripe.network',
+//   'https://api.mapbox.com',
+//   'https://*.mapbox.com',
+//   'https://js.stripe.com',
+//   'https://*.cloudflare.com',
+// ];
+// const styleSrcUrls = [
+//   'https://unpkg.com/',
+//   'https://events.mapbox.com',
+//   'https://*.tiles.mapbox.com',
+//   'https://tile.openstreetmap.org',
+//   'https://fonts.googleapis.com/',
+// ];
+// const connectSrcUrls = [
+//   'https://unpkg.com',
+//   'https://*.tiles.mapbox.com',
+//   'https://api.mapbox.com',
+//   'https://events.mapbox.com',
+//   'https://tile.openstreetmap.org',
+//   'https://*.stripe.com',
+//   'https://bundle.js:*',
+//   'ws://127.0.0.1:*/',
+// ];
+// const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
-      baseUri: ["'self'"],
-      fontSrc: ["'self'", ...fontSrcUrls],
-      scriptSrc: ["'self'", 'https:', 'http:', 'blob:', ...scriptSrcUrls],
-      frameSrc: ["'self'", 'https://js.stripe.com'],
-      objectSrc: ["'none'"],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-      workerSrc: ["'self'", 'blob:', 'https://m.stripe.network'],
-      childSrc: ["'self'", 'blob:'],
-      imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
-      formAction: ["'self'"],
-      connectSrc: [
-        "'self'",
-        "'unsafe-inline'",
-        'data:',
-        'blob:',
-        ...connectSrcUrls,
-      ],
-      upgradeInsecureRequests: [],
-    },
-  })
-);
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
+//       baseUri: ["'self'"],
+//       fontSrc: ["'self'", ...fontSrcUrls],
+//       scriptSrc: ["'self'", 'https:', 'http:', 'blob:', ...scriptSrcUrls],
+//       frameSrc: ["'self'", 'https://js.stripe.com'],
+//       objectSrc: ["'none'"],
+//       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+//       workerSrc: ["'self'", 'blob:', 'https://m.stripe.network'],
+//       childSrc: ["'self'", 'blob:'],
+//       imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+//       formAction: ["'self'"],
+//       connectSrc: [
+//         "'self'",
+//         "'unsafe-inline'",
+//         'data:',
+//         'blob:',
+//         ...connectSrcUrls,
+//       ],
+//       upgradeInsecureRequests: [],
+//     },
+//   })
+// );
 console.log(`App is running in ${process.env.NODE_ENV} mode`);
 
 //Developement Logging
@@ -143,6 +147,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 //Middleware for error handling all routes that don't match the two above
 app.all('*', (req, res, next) => {
