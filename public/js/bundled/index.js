@@ -1647,10 +1647,16 @@ var _alerts = require("./alerts");
 var _stripeJs = require("@stripe/stripe-js");
 var bookTour = function() {
     var _ref = (0, _asyncToGeneratorMjsDefault.default)(function(tourId) {
-        var stripe, session;
+        var stripe, session, err;
         return (0, _tsGeneratorMjsDefault.default)(this, function(_state) {
             switch(_state.label){
                 case 0:
+                    _state.trys.push([
+                        0,
+                        3,
+                        ,
+                        4
+                    ]);
                     return [
                         4,
                         (0, _stripeJs.loadStripe)("pk_test_51L5OEPK5Vz0ZWlMoOsjCUEFVKVxX1q2GLsKPpe0otCAl7AwZiJh6AS1JQoFMRsU0v1DY5tSDNl0Gh9pmVeoRwL5Z00F1nqDUbq")
@@ -1664,12 +1670,30 @@ var bookTour = function() {
                 case 2:
                     session = _state.sent();
                     console.log(session);
+                    // 2) Create checkout form plus charge credit card
+                    //await stripe.redirectToCheckout({
+                    //  sessionId: session.data.session.id,
+                    //});
+                    //works as expected
+                    window.location.replace(session.data.session.url);
+                    return [
+                        3,
+                        4
+                    ];
+                case 3:
+                    err = _state.sent();
+                    console.log(err);
+                    (0, _alerts.showAlert)("error", err);
+                    return [
+                        3,
+                        4
+                    ];
+                case 4:
                     return [
                         2
                     ];
             }
         });
-    // 2) Create checkout form plus charge credit card
     });
     return function bookTour(tourId) {
         return _ref.apply(this, arguments);

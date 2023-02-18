@@ -17,7 +17,10 @@ const viewRouter = require('./routes/viewRoutes');
 
 const AppError = require('./utils/appError');
 
+//const app = express();
+
 const app = express(helmet);
+//app.use(helmet({ contentSecurityPolicy: false }));
 csp(app);
 app.set('view engine', 'pug'); //We can define our view engine but we do not need to add any packages - this already happens with express
 
