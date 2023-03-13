@@ -80,7 +80,7 @@ userSchema.pre('save', function (next) {
 userSchema.pre(/^find/, function (next) {
   //This regular expression '/^find/' will look for the 'find' keyword in the queries.
   // so getAllUsers has find so this middleware will run before that query is executed
-  // this points to the current query
+  // 'this' points to the current query
   this.find({ active: { $ne: false } });
   next();
 });

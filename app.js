@@ -3,11 +3,13 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoSanitze = require('express-mongo-sanitize');
+const compression = require('compression');
+const cors = require('cors');
 const hpp = require('hpp');
 const xss = require('xss-clean');
-//const helmet = require('helmet');
+const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const { helmet, csp } = require('./utils/helmet_csp_config');
+const { csp } = require('./utils/helmet_csp_config');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -17,23 +19,28 @@ const viewRouter = require('./routes/viewRoutes');
 
 const AppError = require('./utils/appError');
 
-//const app = express();
+const app = express();
 
-const app = express(helmet);
-//app.use(helmet({ contentSecurityPolicy: false }));
-csp(app);
+//const app = express(helmet);
+//app.enable('trust proxy');
+
+//csp(app);
 app.set('view engine', 'pug'); //We can define our view engine but we do not need to add any packages - this already happens with express
 
 app.set('views', path.join(__dirname, 'views'));
 
+//app.use(cors());
+
+//app.options('*', cors());
+
 //Serving static files
-//app.use(express.static(`${__dirname}/public`)); //Usiing the path.join method below reduces errors with the paths having a '/' or not
+//app.use(express.static(`${__dirname}/public`)); //Using the path.join method below reduces errors with the paths having a '/' or not
 app.use(express.static(path.join(__dirname, 'public'))); //This means that all static assets will be served from the public folder
 // **GLOBAL MIDDLEWARE
-
+//app.use(helmet({ contentSecurityPolicy: false }));
 // Set security HTTP Headers
 //app.use(helmet()); //Best to use helmet early in the middleware stack so the http headers are surely set
-// Further HELMET configuration for Security Policy (CSP)
+// // Further HELMET configuration for Security Policy (CSP)
 // const scriptSrcUrls = [
 //   'https://unpkg.com/',
 //   'https://tile.openstreetmap.org',
@@ -55,6 +62,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //This means that all s
 // const connectSrcUrls = [
 //   'https://unpkg.com',
 //   'https://*.tiles.mapbox.com',
+//   'https://*.mapbox.com',
 //   'https://api.mapbox.com',
 //   'https://events.mapbox.com',
 //   'https://tile.openstreetmap.org',
@@ -89,6 +97,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //This means that all s
 //     },
 //   })
 // );
+
 console.log(`App is running in ${process.env.NODE_ENV} mode`);
 
 //Developement Logging
@@ -131,6 +140,8 @@ app.use(
   })
 );
 
+app.use(compression());
+
 //**Simple example of middleware structure */
 // app.use((req, res, next) => {
 //   //We have next as the 3rd argument for middleware
@@ -141,7 +152,7 @@ app.use(
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.cookies);
+
   next();
 });
 

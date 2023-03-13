@@ -14,7 +14,7 @@ block content
       nav.user-view__menu
         ul.side-nav
           +navItem('#', 'Settings', 'settings', true)
-          +navItem('#', 'My bookings', 'briefcase')
+          +navItem('/my-tours', 'My bookings', 'briefcase')
           +navItem('#', 'My reviews', 'star')
           +navItem('#', 'Billing', 'credit-card')      
 
@@ -24,7 +24,7 @@ block content
             ul.side-nav
               +navItem('#', 'Manage tours', 'map') 
               +navItem('#', 'Manage users', 'users') 
-              +navItem('#', 'Mangae reviews', 'star') 
+              +navItem('#', 'Manage reviews', 'star') 
               +navItem('#', 'Billing', 'briefcase')               
 
       .user-view__content
@@ -57,12 +57,12 @@ block content
           form.form.form-user-password
             .form__group
               label.form__label(for='password-current') Current password
-              input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
+              input#password-current.form__input(type='password', placeholder='current-password', required, minlength='8')
             .form__group
               label.form__label(for='password') New password
-              input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+              input#password.form__input(type='password', placeholder='new-password', required, minlength='8')
             .form__group.ma-bt-lg
               label.form__label(for='password-confirm') Confirm password
-              input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+              input#password-confirm.form__input(type='password', placeholder='password-confirm', required, minlength='8')
             .form__group.right
               button.btn.btn--small.btn--green.btn--save-password Save password

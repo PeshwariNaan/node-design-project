@@ -7,7 +7,7 @@ const handleCastErrorDB = (err) => {
 
 const handleDuplicateFieldsDB = (err) => {
   const value = Object.values(err.keyValue)[0];
-  console.log(value);
+  //console.log(value);
   const message = `Duplicate field value: ${value}, please use a different value`;
   return new AppError(message, 400);
 };
@@ -48,7 +48,7 @@ const sendErrorForProduction = (err, req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     // A) Operational, trusted error: send message to client
     if (err.isOperational) {
-      console.log(err);
+      //console.log(err);
       return res.status(err.statusCode).json({
         status: err.status,
         message: err.message,

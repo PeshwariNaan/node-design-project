@@ -27,6 +27,7 @@ const createAndSendToken = (user, statusCode, res) => {
 
   //Remove pw from output
   user.password = undefined;
+
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -46,7 +47,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     role: req.body.role,
   });
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+  //console.log(url);
   await new Email(newUser, url).sendWelcome();
   createAndSendToken(newUser, 201, res);
 });
@@ -141,7 +142,6 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
       if (currentUser.changedPasswordAfter(decoded.iat)) {
         return next();
       }
-
       // There is a logged in user
       res.locals.user = currentUser; //Never seen this before - Each pug template will have access to currentUser using '.locals'
       return next();

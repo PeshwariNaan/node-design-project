@@ -2,6 +2,7 @@ const csp = require('express-csp');
 const helmet = require('helmet');
 
 exports.helmet = helmet.contentSecurityPolicy({
+  //contentSecurityPolicy: false,
   //crossOriginEmbedderPolicy: false,
   directives: {
     defaultSrc: ["'self'", 'https://*.mapbox.com', 'https://*.stripe.com'],

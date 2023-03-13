@@ -1,4 +1,5 @@
 const Tour = require('../models/tourModel');
+const Booking = require('../models/bookingModel');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
@@ -66,4 +67,17 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
     title: 'Your account',
     user: updatedUser,
   });
+});
+
+exports.getMyTours = catchAsync(async (req, res, next) => {
+  // 1) Find all bookings
+  const bookings = await Booking.find({ user: req.user.id });
+  // 2) Find tours with returned ID
+  const tourIDs = bookings.map((el) => el.tour); // We can also do a virtual populate here which would be better really - but do it this way to learn a different method
+  const tours = await Tour.find({ _id: { $in: tourIDs } }); // First time seeing this. We cannot use findById so we use
+  // -the $in operator to find all tours (_id) in the tourIDs array.
+  res.status(200).render('overview', {
+    title: 'My Tours',
+    tours,
+  }); // We can reuse this template because it will look the same just with only the booked tours
 });
