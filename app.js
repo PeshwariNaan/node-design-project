@@ -22,7 +22,7 @@ const AppError = require('./utils/appError');
 const app = express(helmetConfig);
 csp(app);
 
-//app.enable('trust proxy');
+app.enable('trust proxy'); //Added because heroku uses proxy's
 app.set('view engine', 'pug'); //We can define our view engine but we do not need to add any packages - this already happens with express
 
 app.set('views', path.join(__dirname, 'views'));

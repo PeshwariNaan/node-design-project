@@ -58,4 +58,12 @@ process.on('unhandledRejection', (err) => {
   });
 });
 
+process.on('SIGTERM', () => {
+  //Heroku sends this event to our app so we need to listen for it and let pending requests finish before shutting down.
+  console.log('SIGTERM RECEIVED...Shutting doooooowwwwwnnnn....');
+  server.close(() => {
+    console.log('Process terminated!');
+  });
+});
+
 //console.log(x);  //This simulates an uncaught exception

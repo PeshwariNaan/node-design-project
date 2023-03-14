@@ -13,7 +13,7 @@ const signToken = (id) =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
-const createAndSendToken = (user, statusCode, res) => {
+const createAndSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
   const expiryDate =
     Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000;
@@ -21,8 +21,9 @@ const createAndSendToken = (user, statusCode, res) => {
   const cookieOptions = {
     expires: new Date(expiryDate),
     httpOnly: true, //This makes it so the token cannot be manipulated by the browser (XSS attacks) //Cannot be deleted either
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //Only activate in production
+  //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //Only activate in production //Moved to options above
   res.cookie('jwt', token, cookieOptions);
 
   //Remove pw from output
@@ -49,7 +50,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   const url = `${req.protocol}://${req.get('host')}/me`;
   //console.log(url);
   await new Email(newUser, url).sendWelcome();
-  createAndSendToken(newUser, 201, res);
+  createAndSendToken(newUser, 201, req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -67,7 +68,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   //If everything is okay, send token to client
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, req, res);
 });
 
 // Logout
@@ -235,7 +236,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, req, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -253,5 +254,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // We cannot use User.findByIdAndUpdate because the validators will not run correctly and the middleware will not run (BAD!!)
 
   // 4) Log user in, send JWT
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, req, res);
 });
