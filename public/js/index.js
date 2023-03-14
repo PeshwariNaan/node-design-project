@@ -3,7 +3,6 @@ import { login, logout } from './login';
 import { displayMap } from './mapbox';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
-import { alerts } from '../../controllers/viewsController';
 import { showAlert } from './alerts';
 
 // DOM ELEMENTS
@@ -68,4 +67,4 @@ if (bookBtn)
   });
 
 const alertMessage = document.querySelector('body').dataset.alert;
-if (alert) showAlert('success', alertMessage, 15);
+if (alertMessage) showAlert('success', alertMessage, 15);
