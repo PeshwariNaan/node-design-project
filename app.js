@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoSanitze = require('express-mongo-sanitize');
 const compression = require('compression');
-//const cors = require('cors');
+const cors = require('cors');
 const hpp = require('hpp');
 const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
@@ -27,9 +27,12 @@ app.set('view engine', 'pug'); //We can define our view engine but we do not nee
 
 app.set('views', path.join(__dirname, 'views'));
 
-//app.use(cors());
+// Access-control-origin-header => *
+app.use(cors());
 
-//app.options('*', cors());
+//This is for more 'complex' routes other than GET and POST - This will handle PATCH and DELETE  etc..
+// We can also do this for individual routes i.e. => app.options('/api/v1/tour/:id', cors())
+app.options('*', cors());
 
 //Serving static files
 //app.use(express.static(`${__dirname}/public`)); //Using the path.join method below reduces errors with the paths having a '/' or not
