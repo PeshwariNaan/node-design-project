@@ -1,24 +1,57 @@
 const csp = require('express-csp');
 const helmet = require('helmet');
 
-exports.helmet = helmet.contentSecurityPolicy({
-  //contentSecurityPolicy: false,
-  //crossOriginEmbedderPolicy: false,
+const scriptSrcUrls = [
+  'https://unpkg.com/',
+  'https://tile.openstreetmap.org',
+  'https://*.tiles.mapbox.com',
+  'https://events.mapbox.com',
+  'https://m.stripe.network',
+  'https://api.mapbox.com',
+  'https://*.mapbox.com',
+  'https://js.stripe.com',
+  'https://*.cloudflare.com',
+];
+const styleSrcUrls = [
+  'https://unpkg.com/',
+  'https://events.mapbox.com',
+  'https://*.tiles.mapbox.com',
+  'https://tile.openstreetmap.org',
+  'https://fonts.googleapis.com/',
+];
+const connectSrcUrls = [
+  'https://unpkg.com',
+  'https://*.tiles.mapbox.com',
+  'https://*.mapbox.com',
+  'https://api.mapbox.com',
+  'https://events.mapbox.com',
+  'https://tile.openstreetmap.org',
+  'https://*.stripe.com',
+  'https://bundle.js:*',
+  'ws://127.0.0.1:*/',
+];
+const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+
+exports.helmetConfig = helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'self'", 'https://*.mapbox.com', 'https://*.stripe.com'],
+    defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
     baseUri: ["'self'"],
-    fontSrc: ["'self'", 'https:', 'data:'],
-    imgSrc: ["'self'", 'https://www.gstatic.com'],
-    scriptSrc: [
-      "'self'",
-      'https://*.stripe.com',
-      'https://cdnjs.cloudflare.com',
-      'https://api.mapbox.com',
-      'https://js.stripe.com',
-      "'blob'",
-    ],
-    frameSrc: ["'self'", 'https://*.stripe.com'],
+    fontSrc: ["'self'", ...fontSrcUrls],
+    scriptSrc: ["'self'", 'https:', 'http:', 'blob:', ...scriptSrcUrls],
+    frameSrc: ["'self'", 'https://js.stripe.com'],
     objectSrc: ["'none'"],
+    styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+    workerSrc: ["'self'", 'blob:', 'https://m.stripe.network'],
+    childSrc: ["'self'", 'blob:'],
+    imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+    formAction: ["'self'"],
+    connectSrc: [
+      "'self'",
+      "'unsafe-inline'",
+      'data:',
+      'blob:',
+      ...connectSrcUrls,
+    ],
     upgradeInsecureRequests: [],
   },
 });

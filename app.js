@@ -4,12 +4,12 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoSanitze = require('express-mongo-sanitize');
 const compression = require('compression');
-const cors = require('cors');
+//const cors = require('cors');
 const hpp = require('hpp');
 const xss = require('xss-clean');
-const helmet = require('helmet');
+//const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const { csp } = require('./utils/helmet_csp_config');
+const { csp, helmetConfig } = require('./utils/helmet_csp_config');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -19,12 +19,10 @@ const viewRouter = require('./routes/viewRoutes');
 
 const AppError = require('./utils/appError');
 
-const app = express();
+const app = express(helmetConfig);
+csp(app);
 
-//const app = express(helmet);
 //app.enable('trust proxy');
-
-//csp(app);
 app.set('view engine', 'pug'); //We can define our view engine but we do not need to add any packages - this already happens with express
 
 app.set('views', path.join(__dirname, 'views'));
@@ -36,67 +34,11 @@ app.set('views', path.join(__dirname, 'views'));
 //Serving static files
 //app.use(express.static(`${__dirname}/public`)); //Using the path.join method below reduces errors with the paths having a '/' or not
 app.use(express.static(path.join(__dirname, 'public'))); //This means that all static assets will be served from the public folder
-// **GLOBAL MIDDLEWARE
-//app.use(helmet({ contentSecurityPolicy: false }));
-// Set security HTTP Headers
-//app.use(helmet()); //Best to use helmet early in the middleware stack so the http headers are surely set
-// // Further HELMET configuration for Security Policy (CSP)
-// const scriptSrcUrls = [
-//   'https://unpkg.com/',
-//   'https://tile.openstreetmap.org',
-//   'https://*.tiles.mapbox.com',
-//   'https://events.mapbox.com',
-//   'https://m.stripe.network',
-//   'https://api.mapbox.com',
-//   'https://*.mapbox.com',
-//   'https://js.stripe.com',
-//   'https://*.cloudflare.com',
-// ];
-// const styleSrcUrls = [
-//   'https://unpkg.com/',
-//   'https://events.mapbox.com',
-//   'https://*.tiles.mapbox.com',
-//   'https://tile.openstreetmap.org',
-//   'https://fonts.googleapis.com/',
-// ];
-// const connectSrcUrls = [
-//   'https://unpkg.com',
-//   'https://*.tiles.mapbox.com',
-//   'https://*.mapbox.com',
-//   'https://api.mapbox.com',
-//   'https://events.mapbox.com',
-//   'https://tile.openstreetmap.org',
-//   'https://*.stripe.com',
-//   'https://bundle.js:*',
-//   'ws://127.0.0.1:*/',
-// ];
-// const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
-//       baseUri: ["'self'"],
-//       fontSrc: ["'self'", ...fontSrcUrls],
-//       scriptSrc: ["'self'", 'https:', 'http:', 'blob:', ...scriptSrcUrls],
-//       frameSrc: ["'self'", 'https://js.stripe.com'],
-//       objectSrc: ["'none'"],
-//       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-//       workerSrc: ["'self'", 'blob:', 'https://m.stripe.network'],
-//       childSrc: ["'self'", 'blob:'],
-//       imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
-//       formAction: ["'self'"],
-//       connectSrc: [
-//         "'self'",
-//         "'unsafe-inline'",
-//         'data:',
-//         'blob:',
-//         ...connectSrcUrls,
-//       ],
-//       upgradeInsecureRequests: [],
-//     },
-//   })
-// );
+// **GLOBAL MIDDLEWARE
+//app.use(helmet({ contentSecurityPolicy: false })); //Okay for testing some stuff but failed after a while
+// Set security HTTP Headers
+//Best to use helmet early in the middleware stack so the http headers are surely set
 
 console.log(`App is running in ${process.env.NODE_ENV} mode`);
 
