@@ -1,5 +1,5 @@
 25161
-67C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\app.js133231994206250730 0
+67C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\app.js133232559160646449 0
 78C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\views\_header.pug133207798884862513 0
 101C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\npm\node_modules\libnpmpack133192929546157179 1
 127C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\sharp\vendor\8.13.3\win32-x64\include\vips\resample.h133117882010000000 0
@@ -137,7 +137,7 @@
 115C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\stripe\types\ApplicationFeesResource.d.ts133210972309014766 0
 120C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\npm\node_modules\are-we-there-yet\node_modules133192929482180438 1
 114C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\@humanwhocodes\config-array\CHANGELOG.md133161033367861383 0
-80C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\stripe.js133211830968990876 0
+80C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\stripe.js133232566328943016 0
 152C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\eslint-plugin-react\node_modules\resolve\test\resolver\false_main\package.json133161037215560713 0
 122C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\performance-now\test\scripts\delayed-call.coffee133210164226422906 0
 78C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\views\_footer.pug133204941289412007 0
@@ -193,7 +193,7 @@
 89C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\.bin\eslint.ps1133161033446117981 0
 121C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\@parcel\fs-search\fs-search.linux-x64-musl.node133207495919577140 0
 100C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\validator\lib\isBoolean.js133167771437102737 0
-78C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\bundled133231955864305787 1
+78C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\bundled133232568484768554 1
 126C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\npm\node_modules\postcss-selector-parser\LICENSE-MIT133192929487461815 0
 104C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\promise\domains\synchronous.js133204163778249523 0
 91C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\controllers\errorController.js133231961530562802 0
@@ -206,7 +206,7 @@
 120C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\core-js-pure\stable\number\virtual\to-fixed.js133161037262262918 0
 111C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\npm\node_modules\color-support\bin.js133192929495533923 0
 93C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\tweetnacl\README.md133210164224527195 0
-73C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\package.json133231951398362798 0
+73C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\package.json133232568480159628 0
 112C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\es-abstract\2018\GetOwnPropertyKeys.js133161037223291313 0
 105C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\npm\node_modules\clone\clone.js133192929497488175 0
 109C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\validator\es\lib\isVariableWidth.js133167771440603475 0
@@ -224,7 +224,7 @@
 103C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\prebuild-install\package.json133208594635466457 0
 94C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\tar-fs\test\fixtures133208594635761097 1
 130C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\lmdb\dependencies\lmdb-data-v1\libraries\liblmdb\tooltag133207495916134224 0
-91C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\bundled\index.js.map133231955864295711 0
+91C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\bundled\index.js.map133232568484768554 0
 114C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\core-js-pure\modules\es.array.reverse.js133161037224740538 0
 95C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\strip-ansi\index.d.ts133161033364819048 0
 102C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\uri-js\node_modules\punycode133211124365019715 1
@@ -483,7 +483,7 @@
 102C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\object-inspect\example\fn.js133160126689239560 0
 130C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\simple-update-notifier\node_modules\semver\ranges\gtr.js133198340213776351 0
 118C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\@parcel\utils\src\replaceBundleReferences.js133207495921087638 0
-87C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\utils\helmet_csp_config.js133231982899047383 0
+87C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\utils\helmet_csp_config.js133232548045311532 0
 113C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\npm\node_modules\semver\functions\eq.js133192929501238007 0
 96C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\simple-update-notifier133198340213101614 1
 102C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\core-js-pure\es\math\log2.js133161037247279386 0
@@ -536,12 +536,12 @@
 101C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\css-tree\lib\utils\clone.js133207495916119796 0
 70C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js133211040307317052 1
 84C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\strip-ansi133161033364588413 1
-79C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\index.js133211078985428973 0
+79C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\index.js133232562671473250 0
 93C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\strip-ansi\index.js133161033362089453 0
 82C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\pug-load133204163777730107 1
-79C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\login.js133231955862588837 0
+79C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\login.js133232565672151244 0
 90C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\srcset\readme.md133207495910439803 0
-88C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\updateSettings.js133208454745942740 0
+88C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\updateSettings.js133232567639841064 0
 112C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\string.prototype.trimend\.editorconfig133161037203260875 0
 98C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\validator\lib\isAscii.js133167771436894890 0
 121C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\mapbox-gl\src\render\program\heatmap_program.js133205129521887706 0
@@ -551,7 +551,7 @@
 93C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\text-table\index.js133161033363010659 0
 139C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\sharp\vendor\8.13.3\win32-x64\include\glib-2.0\gio\gactiongroup.h133117882010000000 0
 92C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\statuses\README.md133160126688927765 0
-87C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\bundled\index.js133231955864227223 0
+87C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\public\js\bundled\index.js133232568484670425 0
 86C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\supercluster133205129454534704 1
 104C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\type-fest\ts41\snake-case.d.ts133161033375772220 0
 139C:\Users\PeshwariNaan\Desktop\Jonas-nodejs\main-node-project\node_modules\eslint-plugin-react\node_modules\resolve\test\resolver\other_path133161037214429261 1

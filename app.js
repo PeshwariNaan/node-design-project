@@ -7,7 +7,6 @@ const compression = require('compression');
 //const cors = require('cors');
 const hpp = require('hpp');
 const xss = require('xss-clean');
-//const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { csp, helmetConfig } = require('./utils/helmet_csp_config');
 const globalErrorHandler = require('./controllers/errorController');
@@ -19,6 +18,7 @@ const viewRouter = require('./routes/viewRoutes');
 
 const AppError = require('./utils/appError');
 
+//const app = express();
 const app = express(helmetConfig);
 csp(app);
 

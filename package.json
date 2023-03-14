@@ -15,7 +15,7 @@
     "start:prod": "SET NODE_ENV=production&&nodemon server.js",
     "debug": "ndb server.js",
     "watch:js": "parcel watch ./public/js/index.js --dist-dir ./public/js/bundled",
-    "build": "parcel build ./public/js/index.js --dist-dir ./public/js/bundled"
+    "build:js": "parcel build ./public/js/index.js --dist-dir ./public/js/bundled"
   },
   "repository": {
     "type": "git",
