@@ -84,6 +84,7 @@ userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();
 });
+
 //User Methods
 userSchema.methods.verifyPassword = async function (
   //Checking if the value of the hashed pw's match to verify

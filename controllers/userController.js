@@ -75,7 +75,7 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file); // This will have the information we need for uploading photos
+  // console.log(req.file); // This will have the information we need for uploading photos
   // console.log(req.body); - Can't work with body here
 
   // 1) Create error if userPOSTs password data
