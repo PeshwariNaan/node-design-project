@@ -40,7 +40,7 @@ block content
               input#name.form__input(type='text', value=`${user.name}`, required, name='name')
             .form__group.ma-bt-md
               label.form__label(for='email') Email address
-              input#email.form__input(type='email', value=`${user.email}`, required, name='email')
+              input#email.form__input(type='email', value=`${user.email}`, required, name='email', disabled)
             .form__group.form__photo-upload
               img.form__user-photo(src=`img/users/${user.photo}`, alt=`Photo of ${user.name}`)
 
@@ -63,6 +63,6 @@ block content
               input#password.form__input(type='password', placeholder='new-password', required, minlength='8')
             .form__group.ma-bt-lg
               label.form__label(for='password-confirm') Confirm password
-              input#password-confirm.form__input(type='password', placeholder='password-confirm', required, minlength='8')
+              input#password-confirm.form__input(type='password', placeholder='password-confirm', required, minlength='8', disabled)
             .form__group.right
               button.btn.btn--small.btn--green.btn--save-password Save password

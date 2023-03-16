@@ -39,6 +39,8 @@ Users should be able to:
 
 ### Links
 
+\*\* NOTE - This version is not responsive yet. Must be viewed on laptop or desktop screen
+
 - Solution URL: [Github-rep](https://github.com/PeshwariNaan/node-design-project.git)
 - Live Site URL: [Live-Link](https://jds-nature-tours.herokuapp.com/)
 

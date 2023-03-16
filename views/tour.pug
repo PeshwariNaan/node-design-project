@@ -88,6 +88,8 @@ block content
         p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
 
         if user
-          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!          
         else 
           a.btn.btn--green.span-all-rows(href='/login') Login to book tour
+      if user 
+        h2.heading-secondary Use credit card number: 4242 4242 4242 4242 to complete tour purchase. All other values are arbitrary.
