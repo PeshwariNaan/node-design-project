@@ -1,8 +1,10 @@
 # Natours App
 
-This web-app is designed to keep track of a users job application status. A user that is hunting for a job can enter information about that job including the name of the company, the location of the job, type of job (full-time, part-time, internship), the title of the position and the status of the application (Pending, Interview or declined). The app records and displays all jobs that have been applied for and shows stats for the past 6 months of job applications in a bar or area graph. The user can also search
+This is a web application for a tour company that offers nature tours in North America. Users can browse the available tours and purchase them using a secure Stripe api.
 
-This is my solution to the Jobify web app from John Smilga's MERN Stack Course 2023 - MongoDB, Express, React and NodeJS.
+Although this was a course project, this code is my own. The API developement was very much based on the course content but much of the content and packages used in the course were outdated by a matter of years and no longer relavent. The code and packages used in this project are the most current ( at the time of completion ) and reflects in my ability to go through documantation and find solutions for complex problems
+
+- MongoDB, Express, React and NodeJS.
 
 ## Table of contents
 
@@ -23,9 +25,10 @@ This is my solution to the Jobify web app from John Smilga's MERN Stack Course 2
 Users should be able to:
 
 - Securely register and login to web-app
-- Ability to add and edit and delete jobs
-- Change user profile and update DB
-- Search through all jobs using any one of the search fields
+- View individual tour details
+- Purchase desired tour using the secure Stripe API
+- View personal profile and edit information as per the users preference.
+- View purcahsed tours under Bookings in user profile.
 
 ### Screenshot
 
