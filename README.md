@@ -75,7 +75,7 @@ This particular course is packed with content and there are too many things to l
 - Complex error handling. I learned how to separate the operational and programming errors. This way you can send useful messages to the user if something goes wrong with user error and keep the programming errors for use by only the developers. This system was difficult to learn and I'm still a little shaky on the details. Below is a flow chart that helps illustrates the error handling.
   ![Error handling](public/assets/Node-backend-architecture.jpg)
 
-- Full payment implementation using Stripe. I have actully used stripe several times in the past but nothing close to how it was used in this project. I was unaware of what could be done with it such personalizing check out screens.
+- Full payment implementation using Stripe. I have actually used stripe several times in the past but nothing close to how it was used in this project. I was unaware of what could be done with it such personalizing check out screens.
 
 - This was the first time I have used server-side rendering using Pug and Pug templates and also the first time using parcel bundler. It was interesting to work through it but I found the flow not very straight forward overly complex at times. I would like to explore other ways of server-side rendering in the future.
 
